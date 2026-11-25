@@ -69,3 +69,59 @@
 .delete:hover:not(:disabled) { border-color: #ead2cd !important; background: #fff5f3 !important; color: #a34638 !important; }
 .check { min-width: 20px; min-height: 20px !important; padding: 0 !important; }
 @media (prefers-reduced-motion: reduce) { :where(.app-shell, .startup) button { transition: none; } }
+
+/* Tablet and phone layout: keep navigation reachable without sacrificing content width. */
+@media (max-width: 900px) {
+  .app-shell { display:flex; flex-direction:column; width:100%; max-width:none; min-height:100dvh; padding-bottom:calc(76px + env(safe-area-inset-bottom)); }
+  .sidebar { position:fixed; z-index:10; inset:auto 0 0; width:100%; height:calc(76px + env(safe-area-inset-bottom)); min-height:0; padding:6px 8px env(safe-area-inset-bottom); display:block; box-shadow:0 -5px 22px #10223820; }
+  .sidebar .brand,.sidebar .side-foot { display:none!important; }
+  .sidebar nav { height:100%; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); align-items:stretch; gap:4px; }
+  .sidebar .nav-item { min-width:0; width:100%; height:60px; min-height:60px!important; padding:5px 2px!important; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-align:center; font-size:clamp(9px,1.8vw,12px)!important; white-space:nowrap; }
+  .sidebar .nav-icon { width:auto; height:20px; }
+  .sidebar .nav-icon .ui-icon { width:18px; height:18px; }
+  .main-area { flex:1; width:100%; min-width:0; padding:clamp(18px,3.5vw,32px) clamp(16px,4vw,40px) 30px; }
+}
+@media (max-width:640px) {
+  .app-shell { padding-bottom:calc(70px + env(safe-area-inset-bottom)); }
+  .sidebar { height:calc(70px + env(safe-area-inset-bottom)); padding-inline:5px; }
+  .sidebar nav { gap:1px; }
+  .sidebar .nav-item { height:56px; min-height:56px!important; gap:3px; font-size:clamp(8px,2.35vw,11px)!important; }
+  .main-area { padding:16px 12px 24px; }
+  .main-area>h1 { font-size:clamp(24px,7vw,30px); overflow-wrap:anywhere; }
+  .topline { display:flex; flex-wrap:wrap; gap:5px 12px; margin-bottom:24px; font-size:11px; }
+  .columns { grid-template-columns:minmax(0,1fr); gap:12px; margin-top:18px; }
+  .stats-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:20px 0; }
+  .stat-card { min-width:0; height:78px; }
+  .stat-card strong { font-size:22px; }
+  .stat-card span { font-size:clamp(8px,2.5vw,11px); text-align:center; }
+  .panel { padding:14px; }
+  .panel-title { align-items:flex-start; gap:8px; flex-wrap:wrap; }
+  .task-row { gap:7px; }
+  .task-name { min-width:0; overflow-wrap:anywhere; }
+  .schedule-block { gap:8px; align-items:center; flex-wrap:wrap; }
+  .button-row { flex-wrap:wrap; }
+  .button-row button { flex:1 1 auto; }
+  .timer-ring { width:min(176px,55vw); height:min(176px,55vw); }
+  .timer-ring strong { font-size:clamp(26px,9vw,33px); }
+  .startup { position:relative; isolation:isolate; min-height:100dvh; overflow:hidden; padding:24px 16px; }
+  .startup-card { position:relative; z-index:1; width:min(420px,100%); padding:clamp(22px,7vw,36px); }
+  .dialog-backdrop { padding:12px; overflow-y:auto; }
+  .dialog { width:min(440px,100%); max-height:calc(100dvh - 24px); overflow-y:auto; }
+  .toast { left:12px; right:12px; bottom:calc(82px + env(safe-area-inset-bottom)); }
+}
+@media (max-width:360px) {
+  .sidebar .nav-item { font-size:0!important; }
+  .sidebar .nav-icon { height:24px; }
+  .stats-grid { gap:5px; }
+  .panel { padding:11px; }
+  .main-area { padding-inline:9px; }
+}
+
+/* Login ambience stays behind the form and never intercepts taps. */
+.startup { position:relative; isolation:isolate; overflow:hidden; }
+.startup::before,.startup::after { content:""; position:fixed; z-index:-1; width:min(48vw,440px); aspect-ratio:1; border-radius:50%; filter:blur(72px); opacity:.48; pointer-events:none; animation:orb-drift 16s ease-in-out infinite alternate; }
+.startup::before { top:4vh; left:-8vw; background:radial-gradient(circle,#82c8e8 0%,#89b8e850 48%,transparent 72%); }
+.startup::after { right:-8vw; bottom:-5vh; background:radial-gradient(circle,#e9a9d0 0%,#e9a9d050 48%,transparent 72%); animation-delay:-7s; }
+.startup-card { position:relative; z-index:1; }
+@keyframes orb-drift { from { transform:translate3d(0,-12px,0) scale(.94); } to { transform:translate3d(6vw,20px,0) scale(1.08); } }
+@media (prefers-reduced-motion:reduce) { .startup::before,.startup::after { animation:none; } }
